@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://bqwix243m1wj5"]
+
+[ext_resource type="Script" uid="uid://ckvn0fiv33guo" path="res://scenes/pPlayer/p_player.gd" id="1_geu15"]
+[ext_resource type="Script" uid="uid://dd3k1g6v1g04b" path="res://scenes/pPlayer/cam_pivot.gd" id="2_v134u"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_7elw4"]
+height = 1.8
+
+[sub_resource type="PrismMesh" id="PrismMesh_geu15"]
+size = Vector3(0.4, 0.6, 0.4)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_geu15"]
+height = 1.8
+
+[node name="CharacterBody3D" type="CharacterBody3D"]
+script = ExtResource("1_geu15")
+
+[node name="ModelPivot" type="Node3D" parent="."]
+
+[node name="MainMesh" type="MeshInstance3D" parent="ModelPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_7elw4")
+skeleton = NodePath("../..")
+
+[node name="DirectionArrow" type="MeshInstance3D" parent="ModelPivot"]
+transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 1.91069e-15, 0, 2.5, 0)
+mesh = SubResource("PrismMesh_geu15")
+skeleton = NodePath("../MainMesh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_geu15")
+
+[node name="CamPivot" type="Node3D" parent="."]
+script = ExtResource("2_v134u")
+
+[node name="Camera3D" type="Camera3D" parent="CamPivot"]
+transform = Transform3D(-4.37114e-08, 0.5, -0.866025, 0, 0.866025, 0.5, 1, 2.18557e-08, -3.78552e-08, -7, 9, 0)

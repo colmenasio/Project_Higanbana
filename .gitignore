@@ -1,0 +1,58 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+# Godot-specific folders
+.import/
+.godot/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+
+# Swap files
+*.swp
+*.swo
+
+# Backup files
+*~
+*.bak
+
+# Exported builds (optional: customize if you store them elsewhere)
+export/
+bin/
+build/
+
+# Godot export templates (optional)
+export_presets.cfg
+
+# Logs (if generated)
+*.log
+
+# VS Code settings (optional)
+.vscode/
+
+# Rider/JetBrains IDEs (optional)
+.idea/
+
+# Godot Mono (C# projects only)
+.mono/
+data_*/             # Build output folders
+*.csproj
+*.sln
+*.user
+*.pidb
+*.suo
+*.dll
+*.exe
+*.pdb
+*.mdb
+*.cache/
+*.config/
+*.vs/
+
+# If using Godot Git plugin (optional)
+addons/godot-git-plugin/bin/
+
