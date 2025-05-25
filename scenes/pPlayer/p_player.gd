@@ -18,6 +18,16 @@ var is_jumping: bool = false;
 var jump_timer: float = 0;
 var jump_starting_y: float = 0;
 
+# Input
+
+func _process(delta: float) -> void:
+	# Process input
+	if Input.is_action_just_pressed("camera_switch_mode"): self.switch_perspective()
+	if $CamPivot.is_top_down() and Input.is_action_just_pressed("camera_top_down_rotate_l"): $CamPivot.rotate_top_down("l")
+	if $CamPivot.is_top_down() and Input.is_action_just_pressed("camera_top_down_rotate_r"): $CamPivot.rotate_top_down("r")
+	
+	self.update_direction()
+
 
 func _physics_process(delta: float) -> void:
 	# Process input
@@ -28,15 +38,11 @@ func _physics_process(delta: float) -> void:
 	var grav_vel: float = -grav*delta if self.do_gravity else 0.0;
 	self.apply_local_delta_vel(Vector3(mov_vel_delta[0], grav_vel, mov_vel_delta[1]))
 	
-	# Apply velocity and reduce
+	# Finalize
 	self.process_jump(delta)
 	self.move_and_slide()
-	self.update_direction()
 	self.decay_velocity()
 	self.finalize_physics()
-	#print("position ", self.position)
-	#print("vel", self.velocity)
-	#print("do_gravity", self.do_gravity)
 
 # Apply an increment of velocity given in the local frame
 # If comply_vel_limits, will not apply the increment past the "vel_limits"
@@ -106,12 +112,36 @@ func finalize_physics():
 		self.end_jump()
 		self.jumps_left = self.max_jumps
 
-# Find the closest
 func update_direction():
-	var vel2d = Vector2(self.velocity[0], self.velocity[2])
-	if vel2d.length() < 0.5:
-		return
+	if $CamPivot.is_top_down(): # Find the closest direction that multiple of pi/4 and apply it to the model
+		var vel = Vector2(self.velocity[0], self.velocity[2])
+		if vel.length() < 0.5: return
+		var pi_over_4 = PI / 4
+		$ModelPivot.rotation.y = - round( vel.angle() / pi_over_4) * pi_over_4
+	elif $CamPivot.is_first_person() or $CamPivot.is_trans_to_td():
+		$ModelPivot.rotation.y = $CamPivot.rotation.y
 		
-	var pi_over_4 = PI / 4
-	$ModelPivot.rotation.y = - round( vel2d.angle() / pi_over_4) * pi_over_4
-	
+
+func get_player_facing_direction() -> Vector3:
+	if $CamPivot.is_top_down():
+		return $ModelPivot.rotation
+	else:
+		return $CamPivot.rotation
+
+func switch_perspective() -> void:
+	if $CamPivot.is_top_down():
+		$CamPivot.switch_to_first_person(self.get_player_facing_direction())
+		self.set_mouse_capture()
+	else:
+		$CamPivot.switch_to_top_down()
+		self.unset_mouse_capture()
+
+func set_mouse_capture():
+	if $CamPivot.is_first_person(): # Cant capture mouse if top down lmao
+		return
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	$CamPivot.set_listen_mouse_movement(true)
+
+func unset_mouse_capture():
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	$CamPivot.set_listen_mouse_movement(false)
