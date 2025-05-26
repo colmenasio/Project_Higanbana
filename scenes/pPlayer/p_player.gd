@@ -25,7 +25,6 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("camera_switch_mode"): self.switch_perspective()
 	if $CamPivot.is_top_down() and Input.is_action_just_pressed("camera_top_down_rotate_l"): $CamPivot.rotate_top_down("l")
 	if $CamPivot.is_top_down() and Input.is_action_just_pressed("camera_top_down_rotate_r"): $CamPivot.rotate_top_down("r")
-	self.process_mouse_input()
 	
 	self.update_direction()
 
@@ -44,6 +43,25 @@ func _physics_process(delta: float) -> void:
 	self.move_and_slide()
 	self.decay_velocity()
 	self.finalize_physics()
+
+func _input(event: InputEvent) -> void:
+	# Mouse input
+	var command: CInteraction
+	if event.is_action_pressed("shift_mouse_l"):
+		command = CInteraction.create(CInteraction.Type.SHIFT_LEFT)
+	elif event.is_action_pressed("shift_mouse_r"):
+		command = CInteraction.create(CInteraction.Type.SHIFT_RIGHT)
+	elif event.is_action_pressed("mouse_l"): 
+		command = CInteraction.create(CInteraction.Type.LEFT)
+	elif event.is_action_pressed("mouse_r"):
+		command = CInteraction.create(CInteraction.Type.RIGHT)
+	else:
+		return
+	
+	var result: Dictionary = $CamPivot.raycast_from_viewport(100)
+	var collider = result.get("collider")
+	if collider != null and IInteractable.impl(collider):
+		collider.i_interact(command)
 
 # Apply an increment of velocity given in the local frame
 # If comply_vel_limits, will not apply the increment past the "vel_limits"
@@ -146,11 +164,3 @@ func set_mouse_capture():
 func unset_mouse_capture():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	$CamPivot.set_listen_mouse_movement(false)
-
-func process_mouse_input():
-	if Input.is_action_just_pressed("mouse_l"):
-		var result: Dictionary = $CamPivot.raycast_from_viewport(100)
-		var collider = result.get("collider")
-		if collider != null and IInteractable.impl(collider):
-			var command = CInteraction.create(CInteraction.Type.LEFT)
-			collider.i_interact(command)
