@@ -1,5 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://btq8klaf7ukdj"]
+[gd_scene load_steps=11 format=3 uid="uid://btq8klaf7ukdj"]
 
+[ext_resource type="Script" uid="uid://cuhxk7kt75kq4" path="res://p_testing.gd" id="1_3oj51"]
 [ext_resource type="Texture2D" uid="uid://bbt72p8mgwprn" path="res://assets/pOldHiganbanaTextures/FloorTest.png" id="1_bl7tw"]
 [ext_resource type="PackedScene" uid="uid://bqwix243m1wj5" path="res://scenes/pPlayer/pPlayer.tscn" id="1_yim1o"]
 [ext_resource type="PackedScene" uid="uid://dyp8s0ard8wd0" path="res://scenes/pMachine/pMachine.tscn" id="2_gy1ic"]
@@ -31,6 +32,7 @@ material = SubResource("StandardMaterial3D_3oj51")
 size = Vector2(100, 100)
 
 [node name="TestZone" type="Node3D"]
+script = ExtResource("1_3oj51")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_autvy")

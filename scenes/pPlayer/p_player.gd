@@ -37,7 +37,7 @@ func _physics_process(delta: float) -> void:
 	# Apply Movement Acceleration
 	var grav_vel: float = -grav*delta if self.do_gravity and not self.is_on_floor() else 0.0;
 	self.apply_local_delta_vel(Vector3(mov_vel_delta[0], grav_vel, mov_vel_delta[1]))
-	
+
 	# Finalize
 	self.process_jump(delta)
 	self.move_and_slide()
