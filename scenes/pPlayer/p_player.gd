@@ -1,4 +1,5 @@
 extends CharacterBody3D
+class_name pPlayer
 
 # Movement
 const vel_limits: Vector3 = Vector3(10, 30, 10) # Absolute limits for speed
@@ -18,13 +19,13 @@ var is_jumping: bool = false;
 var jump_timer: float = 0;
 var jump_starting_y: float = 0;
 
-# Input
 
 func _process(delta: float) -> void:
 	# Process input
 	if Input.is_action_just_pressed("camera_switch_mode"): self.switch_perspective()
 	if $CamPivot.is_top_down() and Input.is_action_just_pressed("camera_top_down_rotate_l"): $CamPivot.rotate_top_down("l")
 	if $CamPivot.is_top_down() and Input.is_action_just_pressed("camera_top_down_rotate_r"): $CamPivot.rotate_top_down("r")
+	self.process_mouse_input()
 	
 	self.update_direction()
 
@@ -35,7 +36,7 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("jump"): self.try_jump()
 	
 	# Apply Movement Acceleration
-	var grav_vel: float = -grav*delta if self.do_gravity else 0.0;
+	var grav_vel: float = -grav*delta if self.do_gravity and not self.is_on_floor() else 0.0;
 	self.apply_local_delta_vel(Vector3(mov_vel_delta[0], grav_vel, mov_vel_delta[1]))
 	
 	# Finalize
@@ -145,3 +146,11 @@ func set_mouse_capture():
 func unset_mouse_capture():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	$CamPivot.set_listen_mouse_movement(false)
+
+func process_mouse_input():
+	if Input.is_action_just_pressed("mouse_l"):
+		var result: Dictionary = $CamPivot.raycast_from_viewport(100)
+		var collider = result.get("collider")
+		if collider != null and IInteractable.impl(collider):
+			var command = CInteraction.create(CInteraction.Type.LEFT)
+			collider.i_interact(command)

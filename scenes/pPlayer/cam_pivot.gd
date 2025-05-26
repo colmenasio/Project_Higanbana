@@ -26,7 +26,7 @@ func _ready() -> void:
 func _input(event):
 	if event is InputEventMouseMotion and self.listen_mouse_movement:
 		var delta = event.relative
-		rotate_camera(delta)
+		self._rotate_camera(delta)
 
 func build_new_tween() -> Tween:
 	if self.active_tween != null and self.active_tween.is_running():
@@ -50,6 +50,7 @@ func switch_to_top_down() -> void:
 	tween.tween_property(self, "rotation", self._get_top_down_snap_angle(), 0.4)
 	tween.tween_property($Camera3D, "position", self.top_down_camera_position, 0.4)
 	tween.tween_property($Camera3D, "rotation", self.top_down_camera_rotation, 0.4)
+	$CrossHair.hide()
 	tween.connect("finished", self._set_state_top_down)
 
 
@@ -59,6 +60,7 @@ func switch_to_first_person(initial_camera_angle: Vector3) -> void:
 	tween.tween_property(self, "rotation", initial_camera_angle, 0.4).set_trans(Tween.TRANS_QUINT)
 	tween.tween_property($Camera3D, "position", Vector3(0, 0, 0), 0.4).set_trans(Tween.TRANS_QUINT)
 	tween.tween_property($Camera3D, "rotation", Vector3(0, -PI/2, 0), 0.4)
+	$CrossHair.show()
 	tween.connect("finished", self._set_state_first_person)
 
 func _set_state_top_down():
@@ -82,6 +84,19 @@ func _get_top_down_snap_angle() -> Vector3:
 func set_listen_mouse_movement(value: bool):
 	self.listen_mouse_movement = value
 
-func rotate_camera(mouse_delta: Vector2):
+func _rotate_camera(mouse_delta: Vector2):
 	self.rotation.z -= clamp(mouse_delta.y * mouse_sensitivity, deg_to_rad(-80), deg_to_rad(80))
 	self.rotation.y -= mouse_delta.x * mouse_sensitivity
+
+# Raycasts from the current viewport in the direction of the mouse
+# In First Person, this is the center of the screen
+# In Top Down and Transition, this is the mouse itself
+func raycast_from_viewport(max_distance: float) -> Dictionary:
+	var space_state = self.get_world_3d().direct_space_state
+	var mousepos = get_viewport().get_mouse_position()
+	var origin = $Camera3D.project_ray_origin(mousepos)
+	var end = origin + $Camera3D.project_ray_normal(mousepos) * max_distance
+	var query = PhysicsRayQueryParameters3D.create(origin, end)
+	query.collide_with_areas = true
+		
+	return space_state.intersect_ray(query)

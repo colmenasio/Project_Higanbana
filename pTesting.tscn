@@ -1,14 +1,47 @@
-[gd_scene load_steps=4 format=3 uid="uid://btq8klaf7ukdj"]
+[gd_scene load_steps=10 format=3 uid="uid://btq8klaf7ukdj"]
 
+[ext_resource type="Texture2D" uid="uid://bbt72p8mgwprn" path="res://assets/pOldHiganbanaTextures/FloorTest.png" id="1_bl7tw"]
 [ext_resource type="PackedScene" uid="uid://bqwix243m1wj5" path="res://scenes/pPlayer/pPlayer.tscn" id="1_yim1o"]
+[ext_resource type="PackedScene" uid="uid://dyp8s0ard8wd0" path="res://scenes/pMachine/pMachine.tscn" id="2_gy1ic"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_bl7tw"]
+sky_top_color = Color(0.521719, 0.638493, 0.973119, 1)
+sky_horizon_color = Color(0.811023, 0.856856, 0.996062, 1)
+ground_bottom_color = Color(0.0850111, 0.151569, 0.373767, 1)
+ground_horizon_color = Color(0.811023, 0.856856, 0.996062, 1)
+
+[sub_resource type="Sky" id="Sky_3oj51"]
+sky_material = SubResource("ProceduralSkyMaterial_bl7tw")
+
+[sub_resource type="Environment" id="Environment_autvy"]
+background_mode = 2
+sky = SubResource("Sky_3oj51")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_difcr"]
 size = Vector3(100, 1, 100)
 
-[sub_resource type="BoxMesh" id="BoxMesh_yim1o"]
-size = Vector3(100, 1, 100)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3oj51"]
+albedo_texture = ExtResource("1_bl7tw")
+emission_enabled = true
+emission = Color(0.0549637, 0.0392592, 0.150518, 1)
+texture_filter = 0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_autvy"]
+material = SubResource("StandardMaterial3D_3oj51")
+size = Vector2(100, 100)
 
 [node name="TestZone" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_autvy")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+light_color = Color(0.57274, 0.928497, 0.974887, 1)
+light_energy = 1.5
+shadow_enabled = true
+shadow_blur = 2.616
+directional_shadow_max_distance = 354.0
 
 [node name="Ground" type="StaticBody3D" parent="."]
 
@@ -17,11 +50,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_difcr")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-mesh = SubResource("BoxMesh_yim1o")
+mesh = SubResource("PlaneMesh_autvy")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 32, 64.2935)
+[node name="pPlayer" parent="." instance=ExtResource("1_yim1o")]
 
-[node name="CharacterBody3D" parent="." instance=ExtResource("1_yim1o")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+[node name="PMachine1" parent="." instance=ExtResource("2_gy1ic")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -6)
+id = 1
+
+[node name="PMachine2" parent="." instance=ExtResource("2_gy1ic")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1, -6)
+id = 2
+
+[node name="PMachine3" parent="." instance=ExtResource("2_gy1ic")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, -6)
+id = 3
