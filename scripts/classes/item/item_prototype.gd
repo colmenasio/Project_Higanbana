@@ -16,8 +16,7 @@ func _init(base_name: String, base_repr: StringName, base_type: ItemType, base_d
 	return 
 
 func stack(amount: int = 0) -> ItemStack:
-	var product = ItemStack.new(self)
-	product._amount = amount
+	var product = ItemStack.new(self, amount)
 	return product
 
 static func create_placeholder(base_name: String, item_type) -> ItemPrototype:
