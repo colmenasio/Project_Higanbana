@@ -21,3 +21,9 @@ static func create(interaction_type: Type, player: pPlayer, canvas: RootCanvas) 
 
 func get_type()->Type:
 	return self._i_type
+
+func get_player()->pPlayer:
+	return self._player
+
+func get_canvas()->RootCanvas:
+	return self._canvas

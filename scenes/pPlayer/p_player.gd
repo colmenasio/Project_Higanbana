@@ -19,20 +19,29 @@ var is_jumping: bool = false;
 var jump_timer: float = 0;
 var jump_starting_y: float = 0;
 
+# Interaction
+var interaction_locked: bool = false # Locked camera and movement due to interaction with ui
 
+func _ready() -> void:
+	$RootCanvas.opened_interaction_widget.connect(_on_open_interaction_widged)
+	$RootCanvas.closed_interaction_widget.connect(_on_close_interaction_widget)
+	
 func _process(delta: float) -> void:
 	# Process input
 	if Input.is_action_just_pressed("camera_switch_mode"): self.switch_perspective()
 	if $CamPivot.is_top_down() and Input.is_action_just_pressed("camera_top_down_rotate_l"): $CamPivot.rotate_top_down("l")
 	if $CamPivot.is_top_down() and Input.is_action_just_pressed("camera_top_down_rotate_r"): $CamPivot.rotate_top_down("r")
+	if Input.is_action_just_pressed("escape"): self.on_escape_pressed()
 	
+	# Model Update
 	self.update_direction()
-
 
 func _physics_process(delta: float) -> void:
 	# Process input
-	var mov_vel_delta: Vector2 = Input.get_vector("move_s", "move_w", "move_a", "move_d") * mov_accel * delta
-	if Input.is_action_just_pressed("jump"): self.try_jump()
+	var mov_vel_delta: Vector2 = Vector2.ZERO
+	if not self.interaction_locked:
+		mov_vel_delta = Input.get_vector("move_s", "move_w", "move_a", "move_d") * mov_accel * delta
+		if Input.is_action_just_pressed("jump"): self.try_jump()
 	
 	# Apply Movement Acceleration
 	var grav_vel: float = -grav*delta if self.do_gravity and not self.is_on_floor() else 0.0;
@@ -148,6 +157,8 @@ func get_player_facing_direction() -> Vector3:
 		return $CamPivot.rotation
 
 func switch_perspective() -> void:
+	if self.interaction_locked:
+		return
 	if $CamPivot.is_top_down():
 		$CamPivot.switch_to_first_person(self.get_player_facing_direction())
 		self.set_mouse_capture()
@@ -158,7 +169,7 @@ func switch_perspective() -> void:
 		$RootCanvas.on_switch_to_top_down()
 
 func set_mouse_capture():
-	if $CamPivot.is_first_person(): # Cant capture mouse if top down lmao
+	if $CamPivot.is_top_down(): # Cant capture mouse if top down lmao
 		return
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	$CamPivot.set_listen_mouse_movement(true)
@@ -166,3 +177,16 @@ func set_mouse_capture():
 func unset_mouse_capture():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	$CamPivot.set_listen_mouse_movement(false)
+
+func on_escape_pressed()-> void:
+	$RootCanvas.close_entity_interaction_widget()
+
+func _on_open_interaction_widged():
+	if $CamPivot.is_first_person() :
+		self.interaction_locked = true
+		self.unset_mouse_capture()
+
+func _on_close_interaction_widget():
+	if $CamPivot.is_first_person() :
+		self.interaction_locked = false
+		self.set_mouse_capture()
