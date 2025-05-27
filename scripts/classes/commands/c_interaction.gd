@@ -9,10 +9,14 @@ enum Type{
 }
 
 var _i_type: Type
+var _player: pPlayer
+var _canvas: RootCanvas
 
-static func create(interaction_type: Type) -> CInteraction:
+static func create(interaction_type: Type, player: pPlayer, canvas: RootCanvas) -> CInteraction:
 	var product = CInteraction.new()
 	product._i_type = interaction_type
+	product._player = player
+	product._canvas = canvas
 	return product
 
 func get_type()->Type:

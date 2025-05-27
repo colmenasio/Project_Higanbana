@@ -48,9 +48,9 @@ func switch_to_top_down() -> void:
 	self.cam_state = CamState.TRANS_TO_TD
 	var tween = self.build_new_tween().set_parallel(true)
 	tween.tween_property(self, "rotation", self._get_top_down_snap_angle(), 0.4)
+	self.target_rotation = self._get_top_down_snap_angle()
 	tween.tween_property($Camera3D, "position", self.top_down_camera_position, 0.4)
 	tween.tween_property($Camera3D, "rotation", self.top_down_camera_rotation, 0.4)
-	$CrossHair.hide()
 	tween.connect("finished", self._set_state_top_down)
 
 
@@ -60,7 +60,6 @@ func switch_to_first_person(initial_camera_angle: Vector3) -> void:
 	tween.tween_property(self, "rotation", initial_camera_angle, 0.4).set_trans(Tween.TRANS_QUINT)
 	tween.tween_property($Camera3D, "position", Vector3(0, 0, 0), 0.4).set_trans(Tween.TRANS_QUINT)
 	tween.tween_property($Camera3D, "rotation", Vector3(0, -PI/2, 0), 0.4)
-	$CrossHair.show()
 	tween.connect("finished", self._set_state_first_person)
 
 func _set_state_top_down():

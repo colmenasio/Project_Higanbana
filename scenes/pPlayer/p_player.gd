@@ -12,7 +12,7 @@ var do_gravity: bool = true
 const jump_duration: float = 0.2     # Time to reach peak
 const jump_linger: float = 0.1     # Time to maintaining the peak in the jump
 const jump_exponent: float = 1.5     # Curve steepness
-const jump_height: float = 5.0      # Peah height of the jump
+const jump_height: float = 5.0      # Peak height of the jump
 const max_jumps: int = 2
 var jumps_left: int = self.max_jumps;
 var is_jumping: bool = false;
@@ -44,17 +44,17 @@ func _physics_process(delta: float) -> void:
 	self.decay_velocity()
 	self.finalize_physics()
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	# Mouse input
 	var command: CInteraction
 	if event.is_action_pressed("shift_mouse_l"):
-		command = CInteraction.create(CInteraction.Type.SHIFT_LEFT)
+		command = CInteraction.create(CInteraction.Type.SHIFT_LEFT, self, $RootCanvas)
 	elif event.is_action_pressed("shift_mouse_r"):
-		command = CInteraction.create(CInteraction.Type.SHIFT_RIGHT)
+		command = CInteraction.create(CInteraction.Type.SHIFT_RIGHT, self, $RootCanvas)
 	elif event.is_action_pressed("mouse_l"): 
-		command = CInteraction.create(CInteraction.Type.LEFT)
+		command = CInteraction.create(CInteraction.Type.LEFT, self, $RootCanvas)
 	elif event.is_action_pressed("mouse_r"):
-		command = CInteraction.create(CInteraction.Type.RIGHT)
+		command = CInteraction.create(CInteraction.Type.RIGHT, self, $RootCanvas)
 	else:
 		return
 	
@@ -151,9 +151,11 @@ func switch_perspective() -> void:
 	if $CamPivot.is_top_down():
 		$CamPivot.switch_to_first_person(self.get_player_facing_direction())
 		self.set_mouse_capture()
+		$RootCanvas.on_switch_to_first_person()
 	else:
 		$CamPivot.switch_to_top_down()
 		self.unset_mouse_capture()
+		$RootCanvas.on_switch_to_top_down()
 
 func set_mouse_capture():
 	if $CamPivot.is_first_person(): # Cant capture mouse if top down lmao

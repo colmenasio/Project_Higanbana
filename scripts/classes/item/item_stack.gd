@@ -7,7 +7,7 @@ Do
 class_name ItemStack
 
 static var EMPTY_PROTOTYPE = ItemPrototype.new("empty", "stack/empty", ItemType.EMPTY, "Empty Stack", 1)
-static var EMPTY = InertItemStack.new(EMPTY_PROTOTYPE, 0)
+static var EMPTY = EmptyItemStack.new(EMPTY_PROTOTYPE, 0)
 
 var _amount: int
 var _overwritten_name = null # Either string or null
@@ -42,14 +42,27 @@ func get_base_repr() -> StringName:
 func get_type() -> ItemType:
 	return self._prototype._base_type
 
-func same_item_as(other: ItemStack) -> bool:
-	return self._prototype == other._prototype
+func stacks_into(other: ItemStack) -> bool:
+	"""
+	Given 2 stacks A and B decide wether A can stack into B.
+	
+	Note that A.stacks_into(B) != B.stacks_into(A). Let me explain:
+	A.stacks_with(B) returns:
+		(1) If A is an empty stack, A does not stack into B
+		(2) If B is an empty stack, A always stacks into B, unless (1)
+		(3) If B is non-empty stack, A stacks into B iff A and B share prototype and metadata
+	If A stacks into B, then stacking them should be equivalent to B.clone_and_set_amount(A.get_amount() + B.get_amount())
+	"""
+	return (
+		other.is_type_empty() or 
+		self._prototype == other._prototype
+		)
 
 func get_base_stack_size() -> int :
 	return self._prototype._base_stack_size
 
 func is_type_empty() -> bool :
-	return self == ItemStack.EMPTY
+	return false
 
 func repr() -> String :
 	return "ItemStack<Name: %s(%s), Type: %s, Amount: %s>" % [ self.get_name(), self.get_base_repr(), self.get_type().name(), self.get_amount() ]
@@ -57,15 +70,31 @@ func repr() -> String :
 func _to_string() -> String:
 	return "ItemStack<Name: %s, Type: %s, Amount: %s>" % [ self.get_name(), self.get_type().name(), self.get_amount() ]
 
-
 func clone() -> ItemStack:
 	var product = ItemStack.new(self._prototype, self._amount)
 	product._overwritten_name = self._overwritten_name
 	return product
 
-class InertItemStack:
+func clone_and_set_amount(amount: int) -> ItemStack:
+	var product = self.clone()
+	product.set_amount(amount)
+	return product
+
+class EmptyItemStack:
 	extends ItemStack
 	
-	func set_amount(amount: int):
-		assert(false, "Cannot modify InertItemStack")
+	func set_amount(amount: int) -> void:
+		assert(false, "Attempted to modify EMPTY ItemStack")
+	
+	func delta_amount(delta: int) -> void:
+		assert(false, "Attempted to modify EMPTY ItemStack")
+	
+	func stacks_into(other: ItemStack) -> bool:
+		return false
+	
+	func clone() -> ItemStack:
+		return self
+	
+	func is_type_empty() -> bool :
+		return true
 	
