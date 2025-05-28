@@ -132,5 +132,8 @@ func can_accept(item: ItemPrototype, slot: int) -> bool:
 	"""Wether a slot can accept a particular item in any context, regardless of current state"""
 	return true
 
+func as_handle() -> ItemHandle:
+	return ItemHandle.new(self)
+
 func _to_string() -> String:
 	return "ItemContainer<Slots: %s, Contents: %s>" % [self.slots(), self._contents ]

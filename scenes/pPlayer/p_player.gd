@@ -21,10 +21,12 @@ var jump_starting_y: float = 0;
 
 # Interaction
 var interaction_locked: bool = false # Locked camera and movement due to interaction with ui
+var _is_inventory_open: bool = false
 
 # ItemContainers
 var _mouse_item_slot: ItemContainer = ItemContainer.new(1, ItemType.SOLID)
- 
+var _main_inventory: ItemContainer = ItemContainer.new(10, ItemType.SOLID)
+var _main_inventory_handle = self._main_inventory.as_handle()
 
 func _ready() -> void:
 	$RootCanvas.opened_interaction_widget.connect(_on_open_interaction_widged)
@@ -36,6 +38,7 @@ func _process(delta: float) -> void:
 	if $CamPivot.is_top_down() and Input.is_action_just_pressed("camera_top_down_rotate_l"): $CamPivot.rotate_top_down("l")
 	if $CamPivot.is_top_down() and Input.is_action_just_pressed("camera_top_down_rotate_r"): $CamPivot.rotate_top_down("r")
 	if Input.is_action_just_pressed("escape"): self.on_escape_pressed()
+	if Input.is_action_just_pressed("main_inventory_toggle"): self._close_inventory() if self._is_inventory_open else self._open_inventory()
 	
 	# Model Update
 	self.update_direction()
@@ -197,6 +200,14 @@ func _on_close_interaction_widget():
 		self.interaction_locked = false
 		self.set_mouse_capture()
 
+func _open_inventory():
+	self._is_inventory_open = true
+	$RootCanvas.on_open_inventory()
+
+func _close_inventory():
+	self._is_inventory_open = false
+	$RootCanvas.on_close_inventory()
+
 ########################################################
 ### Public interface
 ########################################################
@@ -204,3 +215,6 @@ func _on_close_interaction_widget():
 ### ItemContainers
 func get_mouse_item_slot() -> ItemContainer:
 	return self._mouse_item_slot
+
+func get_inventory() -> ItemHandle:
+	return self._main_inventory_handle

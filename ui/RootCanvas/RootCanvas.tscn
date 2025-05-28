@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://70spcmcc35b2"]
+[gd_scene load_steps=7 format=3 uid="uid://70spcmcc35b2"]
 
 [ext_resource type="Script" uid="uid://drpcbl21mfxai" path="res://ui/RootCanvas/root_canvas.gd" id="1_85yrg"]
 [ext_resource type="Texture2D" uid="uid://dtqiq5xq0asww" path="res://assets/pNew/crosshair_reduced.png" id="2_nba5y"]
 [ext_resource type="PackedScene" uid="uid://b1ngao5h0cup0" path="res://ui/ItemStackDisplay/ItemStackDisplay.tscn" id="3_0k58b"]
 [ext_resource type="Script" uid="uid://ive3j14jpbxm" path="res://ui/RootCanvas/mouse_item_stack.gd" id="3_ktlso"]
+[ext_resource type="PackedScene" uid="uid://q1h2hu1ph276" path="res://ui/ItemContainerDisplay/ItemContainerDisplay.tscn" id="5_tcuty"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1lanw"]
 draw_center = false
@@ -89,10 +90,28 @@ grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("2_nba5y")
 
+[node name="Inventory" type="Control" parent="PermanentUI"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="ItemContainerDisplay" parent="PermanentUI/Inventory" instance=ExtResource("5_tcuty")]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -48.5
+offset_right = 274.0
+offset_bottom = 48.5
+grow_vertical = 2
+
 [node name="MouseItemStack" type="Control" parent="PermanentUI"]
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
 mouse_filter = 2
 script = ExtResource("3_ktlso")
 

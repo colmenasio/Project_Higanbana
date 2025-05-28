@@ -1,9 +1,9 @@
 extends Control
 
-var _handle: ItemHandle
+var _handle: ItemHandle = ItemHandle.build_invalid()
 var _slots_displays: Array[ItemStackDisplay]
 
-func initialize(handle: ItemHandle) -> void:
+func set_handle(handle: ItemHandle) -> void:
 	self._handle = handle
 	self._build_slots_displays()
 	self.update_display()

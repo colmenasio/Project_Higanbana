@@ -3,6 +3,9 @@ class_name ItemHandle
 
 var _container
 
+static func build_invalid():
+	return ItemHandle.new(null)
+
 func _init(container: ItemContainer) -> void: 
 	self._container = container
 

@@ -10,6 +10,9 @@ var _entity_interaction_ui = null
 signal opened_interaction_widget()
 signal closed_interaction_widget()
 
+func _ready():
+	$PermanentUI/Inventory/ItemContainerDisplay.set_handle(Game.get_player().get_inventory())
+
 func _process(delta: float) -> void:
 	# Transient UI
 	if _entity_interaction_ui != null and not _entity_interaction_ui.is_valid(): self.close_entity_interaction_widget()
@@ -19,6 +22,20 @@ func on_switch_to_top_down():
 
 func on_switch_to_first_person():	
 	self.close_entity_interaction_widget()
+
+func on_open_inventory():
+	var tween = get_tree().create_tween()
+	var og_position = $PermanentUI/Inventory/ItemContainerDisplay.position
+	print("og_pos", og_position)
+	og_position.x = -$PermanentUI/Inventory/ItemContainerDisplay.size.x -30
+	tween.tween_property($PermanentUI/Inventory/ItemContainerDisplay, "position", og_position, 0.25).set_trans(Tween.TRANS_SPRING)
+
+func on_close_inventory():	
+	var tween = get_tree().create_tween()
+	var og_position = $PermanentUI/Inventory/ItemContainerDisplay.position
+	print("og_pos", og_position)
+	og_position.x = 10
+	tween.tween_property($PermanentUI/Inventory/ItemContainerDisplay, "position", og_position, 0.25)
 
 func set_entity_interaction_widget(node: Control):
 	"""node must implement the 'is_valid' method"""

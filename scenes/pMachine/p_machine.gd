@@ -5,10 +5,10 @@ extends StaticBody3D
 var item_container: ItemContainer = ItemContainer.new(3, ItemType.SOLID)
 
 func _on_button_pressed(command: CInteraction):
-	var ui_scene = preload("res://ui/dItemContainerDisplay/dItemContainerDisplay.tscn")
+	var ui_scene = preload("res://ui/ItemContainerDisplay/ItemContainerDisplay.tscn")
 	var ui_instance = ui_scene.instantiate()
 	
-	ui_instance.initialize(ItemHandle.new(self.item_container))
+	ui_instance.set_handle(ItemHandle.new(self.item_container))
 	command.get_canvas().set_entity_interaction_widget(ui_instance)
 	
 
