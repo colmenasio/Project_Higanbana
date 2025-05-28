@@ -1,0 +1,102 @@
+[gd_scene load_steps=6 format=3 uid="uid://70spcmcc35b2"]
+
+[ext_resource type="Script" uid="uid://drpcbl21mfxai" path="res://ui/RootCanvas/root_canvas.gd" id="1_85yrg"]
+[ext_resource type="Texture2D" uid="uid://dtqiq5xq0asww" path="res://assets/pNew/crosshair_reduced.png" id="2_nba5y"]
+[ext_resource type="PackedScene" uid="uid://b1ngao5h0cup0" path="res://ui/ItemStackDisplay/ItemStackDisplay.tscn" id="3_0k58b"]
+[ext_resource type="Script" uid="uid://ive3j14jpbxm" path="res://ui/RootCanvas/mouse_item_stack.gd" id="3_ktlso"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1lanw"]
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.27451, 0.698039, 0.901961, 0.635294)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="RootCanvas" type="CanvasLayer"]
+script = ExtResource("1_85yrg")
+
+[node name="TransientUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="EntityInteractionUI" type="Control" parent="TransientUI"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = -20.0
+grow_vertical = 0
+
+[node name="PermanentUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="dDebugFrame" type="Panel" parent="PermanentUI"]
+layout_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1lanw")
+
+[node name="Label" type="Label" parent="PermanentUI/dDebugFrame"]
+layout_mode = 0
+offset_left = 11.0
+offset_top = 11.0
+offset_right = 155.0
+offset_bottom = 34.0
+text = "Root canvas active"
+
+[node name="CrossHair" type="TextureRect" parent="PermanentUI"]
+visible = false
+modulate = Color(1, 1, 1, 0.784314)
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_nba5y")
+
+[node name="MouseItemStack" type="Control" parent="PermanentUI"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+script = ExtResource("3_ktlso")
+
+[node name="ItemStackDisplay" parent="PermanentUI/MouseItemStack" instance=ExtResource("3_0k58b")]
+offset_right = 50.0
+offset_bottom = 50.0
+clickable = false

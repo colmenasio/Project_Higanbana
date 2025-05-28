@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://b1ngao5h0cup0"]
+
+[ext_resource type="Script" uid="uid://dt8facpkngkud" path="res://ui/ItemStackDisplay/item_stack_display.gd" id="1_03gam"]
+[ext_resource type="Script" uid="uid://bytsc263ba0ut" path="res://ui/ItemStackDisplay/texture_button.gd" id="2_03gam"]
+
+[node name="ItemStackDisplay" type="Control"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 30.0
+offset_bottom = 30.0
+script = ExtResource("1_03gam")
+
+[node name="TextureButton" type="TextureButton" parent="."]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+button_mask = 3
+stretch_mode = 0
+script = ExtResource("2_03gam")
+
+[node name="Amount" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+horizontal_alignment = 2
