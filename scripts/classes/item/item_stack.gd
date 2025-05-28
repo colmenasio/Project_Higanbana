@@ -6,7 +6,7 @@ Do
 """ 
 class_name ItemStack
 
-static var EMPTY_PROTOTYPE = ItemPrototype.new("empty", "stack/empty", ItemType.EMPTY, "Empty Stack", 1)
+static var EMPTY_PROTOTYPE = ItemPrototype.new("empty", "stack/empty", ItemType.EMPTY, "Empty Stack", 1, load("res://assets/item/EmptyStack.png"))
 static var EMPTY = EmptyItemStack.new(EMPTY_PROTOTYPE, 0)
 
 var _amount: int
@@ -42,21 +42,21 @@ func get_base_repr() -> StringName:
 func get_type() -> ItemType:
 	return self._prototype._base_type
 
+## Given 2 stacks A and B, decide whether A can stack into B. [br]
+## Note that [code]A.stacks_into(B)[/code] is [b]NOT[/b] equivalent to [code]B.stacks_into(A)[/code]. Let me explain: [br][br]
+##
+## [code]A.stacks_into(B)[/code] returns: [br]
+## -  (1) If A is an empty stack, A does not stack into B. [br]
+## -  (2) If B is an empty stack, A always stacks into B, unless (1). [br]
+## -  (3) If B is a non-empty stack, A stacks into B iff A and B share prototype and metadata. [br][br]
+##
+## If A stacks into B, then stacking them should be equivalent to: [br]
+##   [code]B.clone_and_set_amount(A.get_amount() + B.get_amount())[/code]
 func stacks_into(other: ItemStack) -> bool:
-	"""
-	Given 2 stacks A and B decide wether A can stack into B.
-	
-	Note that A.stacks_into(B) != B.stacks_into(A). Let me explain:
-	A.stacks_with(B) returns:
-		(1) If A is an empty stack, A does not stack into B
-		(2) If B is an empty stack, A always stacks into B, unless (1)
-		(3) If B is non-empty stack, A stacks into B iff A and B share prototype and metadata
-	If A stacks into B, then stacking them should be equivalent to B.clone_and_set_amount(A.get_amount() + B.get_amount())
-	"""
 	return (
 		other.is_type_empty() or 
 		self._prototype == other._prototype
-		)
+	)
 
 func get_base_stack_size() -> int :
 	return self._prototype._base_stack_size

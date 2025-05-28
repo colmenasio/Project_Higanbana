@@ -1,8 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://btq8klaf7ukdj"]
+[gd_scene load_steps=10 format=3 uid="uid://btq8klaf7ukdj"]
 
 [ext_resource type="Script" uid="uid://cuhxk7kt75kq4" path="res://p_testing.gd" id="1_3oj51"]
 [ext_resource type="Texture2D" uid="uid://bbt72p8mgwprn" path="res://assets/pOldHiganbanaTextures/FloorTest.png" id="1_bl7tw"]
-[ext_resource type="PackedScene" uid="uid://bqwix243m1wj5" path="res://scenes/pPlayer/pPlayer.tscn" id="1_yim1o"]
 [ext_resource type="PackedScene" uid="uid://dyp8s0ard8wd0" path="res://scenes/pMachine/pMachine.tscn" id="2_gy1ic"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_bl7tw"]
@@ -53,8 +52,6 @@ shape = SubResource("BoxShape3D_difcr")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
 mesh = SubResource("PlaneMesh_autvy")
-
-[node name="pPlayer" parent="." instance=ExtResource("1_yim1o")]
 
 [node name="PMachine1" parent="." instance=ExtResource("2_gy1ic")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -6)

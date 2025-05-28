@@ -21,6 +21,9 @@ func slots() -> int:
 func at(slot: int) -> ItemStack:
 	return self._contents[slot]
 
+func set_slot(slot: int, stack: ItemStack) -> void:
+	self._contents[slot] = stack
+
 func get_capacity(slot: int, base_capacity_if_empty: int = 20) -> int:
 	var base_capacity = base_capacity_if_empty if self._contents[slot].is_type_empty() else self._contents[slot].get_base_stack_size()
 	return base_capacity*self._capacity_multiplier
@@ -31,18 +34,22 @@ func get_amount(slot: int) -> int:
 func get_headroom(slot: int, base_capacity_if_empty: int = 20) -> int:
 	return self.get_capacity(slot, base_capacity_if_empty) - self.get_amount(slot)
 
-func insert(item_in: ItemStack, simulate: bool = false) -> ItemStack:
-	"""
-	Insert ItemStack into container.
-	Will attempt to distribute items in multiple slots if necessary
-	The return value is the remainder that couldnt be inserter, or the EMPTY stack if nothing remained 
-	"""
+
+## Insert ItemStack into container.[br]
+## Will attempt to distribute items in multiple slots if necessary[br]
+## The return value is the remainder that couldnt be inserter, or the EMPTY stack if nothing remained[br][br]
+## [param max_items] specifies the maximum amount of items the container should accept. When its value is 0, the container will accept up to the whole ItemStack
+func insert(item_in: ItemStack, max_items: int = 0, simulate: bool = false) -> ItemStack:
 	assert(not item_in.is_type_empty(), "Interface error: Can not insert EMPTY stack into ItemContainer")
+	# Returned stack
 	var remainder = item_in.clone()
+	# Effective size of the returned stack
+	var eff_remainder_amount = remainder.get_amount() if max_items <= 0 else max_items
+	
 	for slot in get_insertion_slots(remainder):
 		var headroom = self.get_headroom(slot, remainder.get_base_stack_size())
 		if headroom <= 0: continue
-		var inserted_amount = min(headroom, remainder.get_amount())
+		var inserted_amount = min(headroom, eff_remainder_amount)
 		
 		# If fr (not simulate), insert into the Container
 		if not simulate:
@@ -50,7 +57,35 @@ func insert(item_in: ItemStack, simulate: bool = false) -> ItemStack:
 		
 		# Calculate the remainder and if continue iteration if necessary
 		remainder.delta_amount(-inserted_amount)
-		if remainder.get_amount() <= 0: return ItemStack.EMPTY
+		eff_remainder_amount -= inserted_amount
+		if remainder.get_amount() <= 0: return ItemStack.EMPTY # If remainder is empty, return the EMPTY stack
+		if eff_remainder_amount <= 0: return remainder # If the effective remainder amount is 0, no more items can be inserted
+
+	return remainder
+
+## Insert ItemStack into a single slot.[br]
+## Will not attempt to distribute items outside the given slot [br]
+## The return value is the remainder that couldnt be inserted, or the EMPTY stack if nothing remained[br][br]
+## [param max_items] specifies the maximum amount of items the container should accept. When its value is 0, the container will accept up to the whole ItemStack
+func insert_single_slot(slot: int, item_in: ItemStack, max_items: int = 0, simulate: bool = false) -> ItemStack:
+	assert(not item_in.is_type_empty(), "Interface error: Can not insert EMPTY stack into ItemContainer")
+	# Returned stack
+	var remainder = item_in.clone()
+	# Effective size of the returned stack
+	var eff_remainder_amount = remainder.get_amount() if max_items <= 0 else max_items
+	
+	if get_insertion_slots(remainder).has(slot):
+		var headroom = self.get_headroom(slot, remainder.get_base_stack_size())
+		if headroom <= 0: return remainder
+		var inserted_amount = min(headroom, eff_remainder_amount)
+		
+		# If fr (not simulate), insert into the Container
+		if not simulate:
+			self._contents[slot] = remainder.clone_and_set_amount(self.get_amount(slot)+inserted_amount)
+		
+		# Calculate the remainder and if continue iteration if necessary
+		remainder.delta_amount(-inserted_amount)
+		if remainder.get_amount() <= 0: return ItemStack.EMPTY # If remainder is empty, return the EMPTY stack
 
 	return remainder
 

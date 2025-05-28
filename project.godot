@@ -16,6 +16,10 @@ run/main_scene="uid://btq8klaf7ukdj"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Game="*res://scripts/singletons/game.gd"
+
 [display]
 
 window/size/mode=3
@@ -23,6 +27,16 @@ window/size/mode=3
 [editor_plugins]
 
 enabled=PackedStringArray()
+
+[file_customization]
+
+folder_colors={
+"res://assets/": "pink",
+"res://docs/": "gray",
+"res://scripts/": "purple",
+"res://ui/": "teal",
+"res://utils/": "gray"
+}
 
 [input]
 

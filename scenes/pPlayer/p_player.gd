@@ -22,6 +22,10 @@ var jump_starting_y: float = 0;
 # Interaction
 var interaction_locked: bool = false # Locked camera and movement due to interaction with ui
 
+# ItemContainers
+var _mouse_item_slot: ItemContainer = ItemContainer.new(1, ItemType.SOLID)
+ 
+
 func _ready() -> void:
 	$RootCanvas.opened_interaction_widget.connect(_on_open_interaction_widged)
 	$RootCanvas.closed_interaction_widget.connect(_on_close_interaction_widget)
@@ -173,10 +177,12 @@ func set_mouse_capture():
 		return
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	$CamPivot.set_listen_mouse_movement(true)
+	$RootCanvas.crosshair_visibility(true)
 
 func unset_mouse_capture():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	$CamPivot.set_listen_mouse_movement(false)
+	$RootCanvas.crosshair_visibility(false)
 
 func on_escape_pressed()-> void:
 	$RootCanvas.close_entity_interaction_widget()
@@ -190,3 +196,11 @@ func _on_close_interaction_widget():
 	if $CamPivot.is_first_person() :
 		self.interaction_locked = false
 		self.set_mouse_capture()
+
+########################################################
+### Public interface
+########################################################
+
+### ItemContainers
+func get_mouse_item_slot() -> ItemContainer:
+	return self._mouse_item_slot

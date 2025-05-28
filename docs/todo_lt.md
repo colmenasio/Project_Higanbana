@@ -5,6 +5,7 @@
 - [ ] Basic block placement system + inventories + basic ui
 
 ### Mid term
+- [ ] Take a peek at external editors ??
 - [ ] Change player to use States to fix the spaguetti i made lmao 
 
 ### Long LONG term
