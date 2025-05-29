@@ -24,21 +24,25 @@ var interaction_locked: bool = false # Locked camera and movement due to interac
 var _is_inventory_open: bool = false
 
 # ItemContainers
-var _mouse_item_slot: ItemContainer = ItemContainer.new(1, ItemType.SOLID)
-var _main_inventory: ItemContainer = ItemContainer.new(10, ItemType.SOLID)
+var _mouse_item_slot: ItemContainer = ItemContainer.new(1, ItemType.T_SOLID)
+var _main_inventory: ItemContainer = ItemContainer.new(10, ItemType.T_SOLID)
 var _main_inventory_handle = self._main_inventory.as_handle()
 
 func _ready() -> void:
 	$RootCanvas.opened_interaction_widget.connect(_on_open_interaction_widged)
 	$RootCanvas.closed_interaction_widget.connect(_on_close_interaction_widget)
 	
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	# Process input
 	if Input.is_action_just_pressed("camera_switch_mode"): self.switch_perspective()
 	if $CamPivot.is_top_down() and Input.is_action_just_pressed("camera_top_down_rotate_l"): $CamPivot.rotate_top_down("l")
 	if $CamPivot.is_top_down() and Input.is_action_just_pressed("camera_top_down_rotate_r"): $CamPivot.rotate_top_down("r")
 	if Input.is_action_just_pressed("escape"): self.on_escape_pressed()
-	if Input.is_action_just_pressed("main_inventory_toggle"): self._close_inventory() if self._is_inventory_open else self._open_inventory()
+	if Input.is_action_just_pressed("main_inventory_toggle"): 
+		if self._is_inventory_open:
+			self._close_inventory() 
+		else:
+			self._open_inventory()
 	
 	# Model Update
 	self.update_direction()

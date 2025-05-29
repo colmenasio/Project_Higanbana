@@ -1,8 +1,8 @@
 # LONG-TERM TODO LIST
 
 ### Top Priority
-- [x] Basic user controls and mechanics
-- [ ] Basic block placement system + inventories + basic ui
+- [ ] Block placement 
+- [ ] Basic Combat & Item drops
 
 ### Mid term
 - [ ] Take a peek at external editors ??

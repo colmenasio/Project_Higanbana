@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://btq8klaf7ukdj"]
+[gd_scene load_steps=11 format=3 uid="uid://btq8klaf7ukdj"]
 
 [ext_resource type="Script" uid="uid://cuhxk7kt75kq4" path="res://p_testing.gd" id="1_3oj51"]
 [ext_resource type="Texture2D" uid="uid://bbt72p8mgwprn" path="res://assets/pOldHiganbanaTextures/FloorTest.png" id="1_bl7tw"]
-[ext_resource type="PackedScene" uid="uid://dyp8s0ard8wd0" path="res://scenes/pMachine/pMachine.tscn" id="2_gy1ic"]
+[ext_resource type="PackedScene" uid="uid://dyp8s0ard8wd0" path="res://scenes/pChest/pChest.tscn" id="2_gy1ic"]
+[ext_resource type="PackedScene" uid="uid://gs0pp5riwdv" path="res://scenes/pCarpenter/pCarpenter.tscn" id="4_3oj51"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_bl7tw"]
 sky_top_color = Color(0.521719, 0.638493, 0.973119, 1)
@@ -53,14 +54,9 @@ shape = SubResource("BoxShape3D_difcr")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
 mesh = SubResource("PlaneMesh_autvy")
 
-[node name="PMachine1" parent="." instance=ExtResource("2_gy1ic")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -6)
+[node name="Chest1" parent="." instance=ExtResource("2_gy1ic")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2, -6)
 id = 1
 
-[node name="PMachine2" parent="." instance=ExtResource("2_gy1ic")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1, -6)
-id = 2
-
-[node name="PMachine3" parent="." instance=ExtResource("2_gy1ic")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, -6)
-id = 3
+[node name="Carpenter" parent="." instance=ExtResource("4_3oj51")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -6)

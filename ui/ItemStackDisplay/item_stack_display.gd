@@ -12,7 +12,6 @@ class_name ItemStackDisplay
 		return not $TextureButton.disabled
 
 func display_stack(stack: ItemStack):
-	$TextureButton.button_down
 	$TextureButton.texture_normal = stack.get_prototype()._base_texture
 	$TextureButton.texture_hover = load("res://assets/item/EmptyStack.png")
 	$Amount.text = "" if stack.is_type_empty() else String.num_int64(stack.get_amount())

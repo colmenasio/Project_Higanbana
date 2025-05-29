@@ -9,9 +9,9 @@ var _type: ItemType
 var _contents: Array[ItemStack] = []
 var _capacity_multiplier: int
 
-func _init(slots: int, type: ItemType, capacity_multiplier: int = 1) -> void:
+func _init(slots_: int, type: ItemType, capacity_multiplier: int = 1) -> void:
 	self._type = type
-	self._contents.resize(slots)
+	self._contents.resize(slots_)
 	self._contents.fill(ItemStack.EMPTY)
 	self._capacity_multiplier = capacity_multiplier
 
@@ -81,7 +81,7 @@ func insert_single_slot(slot: int, item_in: ItemStack, max_items: int = 0, simul
 		
 		# If fr (not simulate), insert into the Container
 		if not simulate:
-			self._contents[slot] = remainder.clone_and_set_amount(self.get_amount(slot)+inserted_amount)
+			self.set_slot(slot, remainder.clone_and_set_amount(self.get_amount(slot)+inserted_amount))
 		
 		# Calculate the remainder and if continue iteration if necessary
 		remainder.delta_amount(-inserted_amount)
@@ -89,31 +89,32 @@ func insert_single_slot(slot: int, item_in: ItemStack, max_items: int = 0, simul
 
 	return remainder
 
-func extract(item_out: ItemPrototype, amount: int, simulate: bool = false) -> ItemStack:
-	"""
-	Extract ItemStack from container.
-	Will attempt to extract up to the indicated amount of items of the specified ItemPrototype
-	The return value is the extracted stack, or the EMPTY stack if nothing can be extracted 
-	"""
+## Extract ItemStack from container.
+## Will attempt to extract up to the indicated amount of items of the specified ItemPrototype
+## The return value is the extracted stack, or the EMPTY stack if nothing can be extracted 
+## [param max_items] specifies the maximum amount of items the container should accept. When its value is 0, the container will extract as much as possible
+func extract(item_out: ItemPrototype, max_items: int = 0, simulate: bool = false) -> ItemStack:
+
 	var extracted_stack = item_out.stack(0)
 	for slot in self.slots():
 		if self.at(slot).stacks_into(extracted_stack):
-			var extracted_amount = min(amount-extracted_stack.get_amount(), self.at(slot).get_amount())
+			var extracted_amount = self.at(slot).get_amount()
+			if max_items > 0: # Cap the extracted amount
+				extracted_amount = min(max_items-extracted_stack.get_amount(), extracted_amount)
 			extracted_stack.delta_amount(extracted_amount)
-			self.at(slot).delta_amount(-extracted_amount)
+			if not simulate: self.at(slot).delta_amount(-extracted_amount)
 			if self.at(slot).get_amount() <= 0: self._contents[slot] = ItemStack.EMPTY
-			if extracted_stack.get_amount() == amount: return extracted_stack
+			if extracted_stack.get_amount() == max_items: return extracted_stack
 	return extracted_stack if extracted_stack.get_amount() != 0 else ItemStack.EMPTY
 
-func extract_any(amount: int, simulate: bool = false) -> ItemStack:
-	"""
-	Extract ItemStack from container.
-	Will attempt to extract up to the indicated amount of items of any arbitrary ItemPrototype
-	The return value is the extracted stack, or the EMPTY stack if nothing can be extracted 
-	"""
+## Extract ItemStack from container.
+## Will attempt to extract up to the indicated amount of items of any arbitrary ItemPrototype
+## The return value is the extracted stack, or the EMPTY stack if nothing can be extracted 
+## [param max_items] specifies the maximum amount of items the container should accept. When its value is 0, the container will extract es much as possible
+func extract_any(max_items: int = 0, simulate: bool = false) -> ItemStack:
 	for stack in self._contents:
 		if not stack.is_type_empty():
-			return self.extract(stack.get_prototype(), amount, simulate)
+			return self.extract(stack.get_prototype(), max_items, simulate)
 	return ItemStack.EMPTY
 
 func get_insertion_slots(item_in: ItemStack) -> Array[int]:
@@ -128,7 +129,7 @@ func get_insertion_slots(item_in: ItemStack) -> Array[int]:
 			available_slots.append(slot)
 	return available_slots
 
-func can_accept(item: ItemPrototype, slot: int) -> bool:
+func can_accept(_item: ItemPrototype, _slot: int) -> bool:
 	"""Wether a slot can accept a particular item in any context, regardless of current state"""
 	return true
 

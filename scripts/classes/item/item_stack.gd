@@ -6,7 +6,7 @@ Do
 """ 
 class_name ItemStack
 
-static var EMPTY_PROTOTYPE = ItemPrototype.new("empty", "stack/empty", ItemType.EMPTY, "Empty Stack", 1, load("res://assets/item/EmptyStack.png"))
+static var EMPTY_PROTOTYPE = ItemPrototype.new("empty", "stack/empty", ItemType.T_EMPTY, "Empty Stack", 1, load("res://assets/item/EmptyStack.png"))
 static var EMPTY = EmptyItemStack.new(EMPTY_PROTOTYPE, 0)
 
 var _amount: int
@@ -83,13 +83,13 @@ func clone_and_set_amount(amount: int) -> ItemStack:
 class EmptyItemStack:
 	extends ItemStack
 	
-	func set_amount(amount: int) -> void:
+	func set_amount(_amount_: int) -> void:
 		assert(false, "Attempted to modify EMPTY ItemStack")
 	
-	func delta_amount(delta: int) -> void:
+	func delta_amount(_delta: int) -> void:
 		assert(false, "Attempted to modify EMPTY ItemStack")
 	
-	func stacks_into(other: ItemStack) -> bool:
+	func stacks_into(_other: ItemStack) -> bool:
 		return false
 	
 	func clone() -> ItemStack:

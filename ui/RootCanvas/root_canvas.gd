@@ -11,9 +11,9 @@ signal opened_interaction_widget()
 signal closed_interaction_widget()
 
 func _ready():
-	$PermanentUI/Inventory/ItemContainerDisplay.set_handle(Game.get_player().get_inventory())
+	$PermanentUI/Inventory/InventoryPanel/MarginContainer/VBoxContainer/ItemContainerDisplay.set_handle(Game.get_player().get_inventory())
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	# Transient UI
 	if _entity_interaction_ui != null and not _entity_interaction_ui.is_valid(): self.close_entity_interaction_widget()
 
@@ -25,17 +25,15 @@ func on_switch_to_first_person():
 
 func on_open_inventory():
 	var tween = get_tree().create_tween()
-	var og_position = $PermanentUI/Inventory/ItemContainerDisplay.position
-	print("og_pos", og_position)
-	og_position.x = -$PermanentUI/Inventory/ItemContainerDisplay.size.x -30
-	tween.tween_property($PermanentUI/Inventory/ItemContainerDisplay, "position", og_position, 0.25).set_trans(Tween.TRANS_SPRING)
+	var og_position = $PermanentUI/Inventory/InventoryPanel.position
+	og_position.x = -$PermanentUI/Inventory/InventoryPanel.size.x -30
+	tween.tween_property($PermanentUI/Inventory/InventoryPanel, "position", og_position, 0.25).set_trans(Tween.TRANS_SPRING)
 
 func on_close_inventory():	
 	var tween = get_tree().create_tween()
-	var og_position = $PermanentUI/Inventory/ItemContainerDisplay.position
-	print("og_pos", og_position)
+	var og_position = $PermanentUI/Inventory/InventoryPanel.position
 	og_position.x = 10
-	tween.tween_property($PermanentUI/Inventory/ItemContainerDisplay, "position", og_position, 0.25)
+	tween.tween_property($PermanentUI/Inventory/InventoryPanel, "position", og_position, 0.25)
 
 func set_entity_interaction_widget(node: Control):
 	"""node must implement the 'is_valid' method"""

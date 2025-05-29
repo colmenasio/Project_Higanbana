@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dyp8s0ard8wd0"]
 
 [ext_resource type="Texture2D" uid="uid://hf6bqblye6o5" path="res://assets/pOldHiganbanaTextures/TestUvMapCube2.png" id="1_a2duj"]
-[ext_resource type="Script" uid="uid://bchtpjuo6it1p" path="res://scenes/pMachine/p_machine.gd" id="1_ttsip"]
+[ext_resource type="Script" uid="uid://bchtpjuo6it1p" path="res://scenes/pChest/p_chest.gd" id="1_ttsip"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ttsip"]
 
@@ -13,7 +13,7 @@ texture_filter = 0
 [sub_resource type="BoxMesh" id="BoxMesh_4mrsk"]
 material = SubResource("StandardMaterial3D_5pksf")
 
-[node name="PMachine" type="StaticBody3D"]
+[node name="pChest" type="StaticBody3D"]
 script = ExtResource("1_ttsip")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

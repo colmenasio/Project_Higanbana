@@ -6,8 +6,8 @@ var _container
 static func build_invalid():
 	return ItemHandle.new(null)
 
-func _init(container: ItemContainer) -> void: 
-	self._container = container
+func _init(container_: ItemContainer) -> void: 
+	self._container = container_
 
 func is_valid() -> bool:
 	return self._container != null

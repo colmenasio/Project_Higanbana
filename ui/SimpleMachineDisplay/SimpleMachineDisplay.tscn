@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://cohfoaikk0b82"]
+
+[ext_resource type="PackedScene" uid="uid://q1h2hu1ph276" path="res://ui/ItemContainerDisplay/ItemContainerDisplay.tscn" id="1_fol1j"]
+[ext_resource type="Script" uid="uid://beb06hswddfie" path="res://ui/SimpleMachineDisplay/simple_machine_display.gd" id="1_uffq6"]
+
+[node name="SimpleMachineDisplay" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_uffq6")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="InputDisplay" parent="HBoxContainer" instance=ExtResource("1_fol1j")]
+layout_mode = 2
+
+[node name="Arrow" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "--->"
+
+[node name="OutputDisplay" parent="HBoxContainer" instance=ExtResource("1_fol1j")]
+layout_mode = 2
+allow_input = false

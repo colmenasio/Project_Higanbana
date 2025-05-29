@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=3 uid="uid://gs0pp5riwdv"]
+
+[ext_resource type="Script" uid="uid://dhvrenhhxsm3p" path="res://scenes/pCarpenter/p_carpenter.gd" id="1_751l3"]
+[ext_resource type="Texture2D" uid="uid://cpt2q4m7jbmuv" path="res://assets/pOldHiganbanaTextures/pCarpenter.png" id="2_751l3"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ttsip"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5pksf"]
+albedo_texture = ExtResource("2_751l3")
+normal_scale = -9.9
+texture_filter = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_4mrsk"]
+material = SubResource("StandardMaterial3D_5pksf")
+
+[node name="pCarpenter" type="StaticBody3D"]
+script = ExtResource("1_751l3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 0.5)
+shape = SubResource("BoxShape3D_ttsip")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 0.5)
+mesh = SubResource("BoxMesh_4mrsk")

@@ -2,7 +2,7 @@ extends StaticBody3D
 
 @export var id: int = 0
 
-var item_container: ItemContainer = ItemContainer.new(3, ItemType.SOLID)
+var item_container: ItemContainer = ItemContainer.new(3, ItemType.T_SOLID)
 
 func _on_button_pressed(command: CInteraction):
 	var ui_scene = preload("res://ui/ItemContainerDisplay/ItemContainerDisplay.tscn")

@@ -1,4 +1,8 @@
 extends Control
+class_name ItemContainerDisplay
+
+@export var allow_input: bool = true
+@export var allow_output: bool = true
 
 var _handle: ItemHandle = ItemHandle.build_invalid()
 var _slots_displays: Array[ItemStackDisplay]
@@ -10,7 +14,6 @@ func set_handle(handle: ItemHandle) -> void:
 
 func _process(_delta: float) -> void:
 	self.update_display()
-	print()
 
 func _build_slots_displays() -> void:
 	if not self._handle.is_valid(): 
@@ -20,7 +23,7 @@ func _build_slots_displays() -> void:
 		var display = UIFactory.new_item_stack_display()
 		display.bind_callback(self._on_press.bind(slot_index))
 		self._slots_displays.append(display)
-		$MarginContainer/VBoxContainer/Slots.add_child(display)
+		self.add_child(display)
 
 func update_display():
 	if not self._handle.is_valid(): 
@@ -38,29 +41,34 @@ func _on_press(type: CInteraction.Type, slot: int):
 		return
 	var container = self._handle.container()
 	var mouse_item_slot = Game.get_player().get_mouse_item_slot()
-	if Input.is_action_pressed("shift_mouse_l"):
+	if type == CInteraction.Type.SHIFT_LEFT:
 		# Directly to inventory
 		push_warning("Not Implemented")
-	elif Input.is_action_pressed("shift_mouse_r"):
+	elif type == CInteraction.Type.SHIFT_RIGHT:
 		# Take 1
+		if not self.allow_output: return
 		if container.at(slot).is_type_empty(): return
 		var remainder = mouse_item_slot.insert(container.at(slot), 1)
 		container.set_slot(slot, remainder)
-	elif Input.is_action_pressed("mouse_l"):
+	elif  type == CInteraction.Type.LEFT:
 		# Insert / take all
 		if mouse_item_slot.at(0).is_type_empty():
+			if not self.allow_output: return
 			if container.at(slot).is_type_empty(): return
 			var remainder = mouse_item_slot.insert(container.at(slot))
 			container.set_slot(slot, remainder)
 		else:
+			if not self.allow_input: return
 			var remainder = container.insert_single_slot(slot, mouse_item_slot.at(0))
 			mouse_item_slot.set_slot(0, remainder)
-	elif Input.is_action_pressed("mouse_r"):
+	elif  type == CInteraction.Type.RIGHT:
 		# Insert 1 /take half
 		if mouse_item_slot.at(0).is_type_empty():
 			if container.at(slot).is_type_empty(): return
-			var remainder = mouse_item_slot.insert(container.at(slot), container.at(slot).get_amount()/2)
+			if not self.allow_output: return
+			var remainder = mouse_item_slot.insert(container.at(slot), int(container.at(slot).get_amount()/2))
 			container.set_slot(slot, remainder)
 		else:
+			if not self.allow_input: return
 			var remainder = container.insert_single_slot(slot, mouse_item_slot.at(0), 1)
 			mouse_item_slot.set_slot(0, remainder)
