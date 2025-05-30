@@ -12,7 +12,6 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="TitleContainer"]
 layout_mode = 2
-text = "<NO TITLE>"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 2

@@ -5,7 +5,7 @@ class_name ItemContainerDisplay
 @export var allow_input: bool = true
 @export var allow_output: bool = true
 
-@export var title: String = "<NO TITLE>":
+@export var title: String = "":
 	set(value):
 		if not self.is_node_ready(): await ready
 		title = value
