@@ -5,7 +5,6 @@
 
 ## WORKFLOW Factory
 - [ ] Recipes 
-- [ ] TileEntity hell yeah viva maincrah
 
 ## WORKFLOW Rogue
 - [ ] Basic attack
@@ -13,6 +12,7 @@
 
 
 ## DONE (here for visual gratification)
+- [x] TileEntity hell yeah viva maincrah (Make Game be able manage TileEntity creation and ticking)
 - [x] Basic machine prototype
 - [x] Basic debug inventory UI and manual item handling 
 - [x] Inventory & Items

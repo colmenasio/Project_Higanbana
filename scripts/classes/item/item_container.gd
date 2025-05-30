@@ -94,13 +94,13 @@ func insert_single_slot(slot: int, item_in: ItemStack, max_items: int = 0, simul
 ## The return value is the extracted stack, or the EMPTY stack if nothing can be extracted 
 ## [param max_items] specifies the maximum amount of items the container should accept. When its value is 0, the container will extract as much as possible
 func extract(item_out: ItemPrototype, max_items: int = 0, simulate: bool = false) -> ItemStack:
-
 	var extracted_stack = item_out.stack(0)
 	for slot in self.slots():
 		if self.at(slot).stacks_into(extracted_stack):
 			var extracted_amount = self.at(slot).get_amount()
 			if max_items > 0: # Cap the extracted amount
 				extracted_amount = min(max_items-extracted_stack.get_amount(), extracted_amount)
+			print(extracted_amount, " out of a max of ", max_items)
 			extracted_stack.delta_amount(extracted_amount)
 			if not simulate: self.at(slot).delta_amount(-extracted_amount)
 			if self.at(slot).get_amount() <= 0: self._contents[slot] = ItemStack.EMPTY

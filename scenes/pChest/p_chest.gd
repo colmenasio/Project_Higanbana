@@ -1,4 +1,4 @@
-extends StaticBody3D
+extends PhysicalTile
 
 @export var id: int = 0
 

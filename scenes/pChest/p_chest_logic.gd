@@ -1,0 +1,2 @@
+extends LogicTile
+class_name LogicTilePChest

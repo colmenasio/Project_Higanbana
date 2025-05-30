@@ -1,7 +1,5 @@
 extends StaticBody3D
 
-@export var id: int = 0
-
 var input_inventory: ItemContainer = ItemContainer.new(2, ItemType.T_SOLID)
 var output_inventory: ItemContainer = ItemContainer.new(1, ItemType.T_SOLID)
 var current_recipe: Recipe = null
@@ -56,7 +54,7 @@ class Recipe:
 	func matches(available: ItemContainer, mult_cap: int = 1) -> int:
 		var max_mult = mult_cap
 		for required_input in self._input:
-			var rounds = int(available.extract(required_input.get_prototype(), 0, false).get_amount() / required_input.get_amount())
+			var rounds = int(available.extract(required_input.get_prototype(), 0, true).get_amount() / required_input.get_amount())
 			if rounds == 0: return 0
 			max_mult = rounds if max_mult == 0 else min(max_mult, rounds)
 		return max_mult

@@ -40,9 +40,9 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("escape"): self.on_escape_pressed()
 	if Input.is_action_just_pressed("main_inventory_toggle"): 
 		if self._is_inventory_open:
-			self._close_inventory() 
+			self.close_inventory() 
 		else:
-			self._open_inventory()
+			self.open_inventory()
 	
 	# Model Update
 	self.update_direction()
@@ -195,26 +195,31 @@ func on_escape_pressed()-> void:
 	$RootCanvas.close_entity_interaction_widget()
 
 func _on_open_interaction_widged():
+	self.open_inventory()
 	if $CamPivot.is_first_person() :
 		self.interaction_locked = true
 		self.unset_mouse_capture()
 
 func _on_close_interaction_widget():
+	self.close_inventory()
 	if $CamPivot.is_first_person() :
 		self.interaction_locked = false
 		self.set_mouse_capture()
 
-func _open_inventory():
-	self._is_inventory_open = true
-	$RootCanvas.on_open_inventory()
-
-func _close_inventory():
-	self._is_inventory_open = false
-	$RootCanvas.on_close_inventory()
 
 ########################################################
 ### Public interface
 ########################################################
+
+### UI Hooks
+
+func open_inventory():
+	self._is_inventory_open = true
+	$RootCanvas.on_open_inventory()
+
+func close_inventory():
+	self._is_inventory_open = false
+	$RootCanvas.on_close_inventory()
 
 ### ItemContainers
 func get_mouse_item_slot() -> ItemContainer:
