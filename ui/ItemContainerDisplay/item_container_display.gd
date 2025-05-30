@@ -1,8 +1,24 @@
+@tool
 extends Control
 class_name ItemContainerDisplay
 
 @export var allow_input: bool = true
 @export var allow_output: bool = true
+
+@export var title: String = "<NO TITLE>":
+	set(value):
+		if not self.is_node_ready(): await ready
+		title = value
+		$TitleContainer/Title.text = title
+		if title == "":
+			$TitleContainer.hide()
+
+#@export_group("Conditional Settings", "title_down_padding")
+@export var title_down_padding: int = 0:
+	set(value):
+		if not self.is_node_ready(): await ready
+		title_down_padding = value
+		$TitleContainer.add_theme_constant_override("margin_bottom", value)
 
 var _handle: ItemHandle = ItemHandle.build_invalid()
 var _slots_displays: Array[ItemStackDisplay]
@@ -23,7 +39,8 @@ func _build_slots_displays() -> void:
 		var display = UIFactory.new_item_stack_display()
 		display.bind_callback(self._on_press.bind(slot_index))
 		self._slots_displays.append(display)
-		self.add_child(display)
+		##$ScrollContainer/GridContainer.
+		$ScrollContainer/GridContainer.add_child(display)
 
 func update_display():
 	if not self._handle.is_valid(): 

@@ -2,11 +2,24 @@
 
 [ext_resource type="Script" uid="uid://bsfyufgraji1p" path="res://ui/ItemContainerDisplay/item_container_display.gd" id="1_sai34"]
 
-[node name="ItemContainerDisplay" type="GridContainer"]
-custom_minimum_size = Vector2(50, 50)
-offset_left = 10.0
-offset_top = 10.0
-offset_right = 60.0
-offset_bottom = 60.0
-columns = 5
+[node name="VBoxContainer" type="VBoxContainer"]
+offset_right = 118.0
+offset_bottom = 27.0
 script = ExtResource("1_sai34")
+
+[node name="TitleContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="TitleContainer"]
+layout_mode = 2
+text = "<NO TITLE>"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 2
+follow_focus = true
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer"]
+layout_mode = 2
+columns = 5

@@ -11,7 +11,7 @@ signal opened_interaction_widget()
 signal closed_interaction_widget()
 
 func _ready():
-	$PermanentUI/Inventory/InventoryPanel/MarginContainer/VBoxContainer/ItemContainerDisplay.set_handle(Game.get_player().get_inventory())
+	$PermanentUI/Inventory/InventoryPanel/MarginContainer/ItemContainerDisplay.set_handle(Game.get_player().get_inventory())
 
 func _process(_delta: float) -> void:
 	# Transient UI
