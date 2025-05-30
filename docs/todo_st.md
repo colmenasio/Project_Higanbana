@@ -5,7 +5,6 @@
 - [ ] Creative Tabs & InfiniteItemStack
 
 ## WORKFLOW Factory
-- [ ] Formalizar Interacciones mediante PhysicalTile 
 - [ ] Recipes 
 
 ## WORKFLOW Rogue
@@ -14,6 +13,7 @@
 
 
 ## DONE (here for visual gratification)
+- [x] Formalizar Interacciones mediante PhysicalTile 
 - [x] TileEntity hell yeah viva maincrah (Make Game be able manage TileEntity creation and ticking)
 - [x] Basic machine prototype
 - [x] Basic debug inventory UI and manual item handling 

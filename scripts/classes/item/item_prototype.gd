@@ -22,6 +22,9 @@ func stack(amount: int = 0) -> ItemStack:
 	var product = ItemStack.new(self, amount)
 	return product
 
+func get_base_stack_size() -> int:
+	return self._base_stack_size
+
 func set_placeable_prototype(value: PlaceablePrototype)->void:
 	self._placeable_prototype = value
 

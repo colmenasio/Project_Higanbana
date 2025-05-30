@@ -116,19 +116,22 @@ func extract_any(max_items: int = 0, simulate: bool = false) -> ItemStack:
 			return self.extract(stack.get_prototype(), max_items, simulate)
 	return ItemStack.EMPTY
 
+## If the item were to be inserted in the container, return the slot it could be inserted into, in order of preference
+## Should not care about vacancy of the slot
 func get_insertion_slots(item_in: ItemStack) -> Array[int]:
-	"""
-	If the item were to be inserted in the container, return the slot it could be inserted into, in order of preference
-	Should not care about vacancy of the slot
-	"""
 	var available_slots: Array[int] = []
+	var empty_slots: Array[int] = []
 	for slot in self.slots():
-		if not self.can_accept(item_in.get_prototype(), slot): continue
+		if not self.can_accept(item_in, slot): continue
 		if item_in.stacks_into(self.at(slot)):
-			available_slots.append(slot)
+			if self.at(slot).is_type_empty(): 
+				empty_slots.append(slot)
+			else: 
+				available_slots.append(slot)
+	available_slots.append_array(empty_slots) # Note doing it this way is necessary since slots already occupied are of higher preference
 	return available_slots
 
-func can_accept(_item: ItemPrototype, _slot: int) -> bool:
+func can_accept(_item: ItemStack, _slot: int) -> bool:
 	"""Wether a slot can accept a particular item in any context, regardless of current state"""
 	return true
 

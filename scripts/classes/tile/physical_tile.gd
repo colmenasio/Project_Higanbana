@@ -14,7 +14,7 @@ func _tile_init(grid_pos: Vector3i):
 func get_grid_pos() -> Vector3i:
 	return self._grid_pos
 
-func interact(command: CInteraction):
+func interact(_command: CInteraction):
 	pass
 
 func on_place():
