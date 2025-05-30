@@ -80,8 +80,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	var result: Dictionary = $CamPivot.raycast_from_viewport(100)
 	var collider = result.get("collider")
-	if collider != null and IInteractable.impl(collider):
-		collider.i_interact(command)
+	if collider != null and collider is PhysicalTile:
+		collider.interact(command)
 
 # Apply an increment of velocity given in the local frame
 # If comply_vel_limits, will not apply the increment past the "vel_limits"

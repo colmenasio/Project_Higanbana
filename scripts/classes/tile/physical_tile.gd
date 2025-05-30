@@ -4,5 +4,5 @@ class_name PhysicalTile
 func interact(command: CInteraction):
 	pass
 
-func place_in_world(position: Vector3i):
+func on_place():
 	pass

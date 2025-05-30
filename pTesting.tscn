@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://cuhxk7kt75kq4" path="res://p_testing.gd" id="1_3oj51"]
 [ext_resource type="Texture2D" uid="uid://bbt72p8mgwprn" path="res://assets/pOldHiganbanaTextures/FloorTest.png" id="1_bl7tw"]
-[ext_resource type="PackedScene" uid="uid://dyp8s0ard8wd0" path="res://scenes/pChest/pChest.tscn" id="2_gy1ic"]
-[ext_resource type="PackedScene" uid="uid://gs0pp5riwdv" path="res://scenes/pCarpenter/pCarpenter.tscn" id="4_3oj51"]
+[ext_resource type="PackedScene" uid="uid://dyp8s0ard8wd0" path="res://scenes/physical_tile/pChest/pChest.tscn" id="2_gy1ic"]
+[ext_resource type="PackedScene" uid="uid://gs0pp5riwdv" path="res://scenes/physical_tile/pCarpenter/pCarpenter.tscn" id="4_3oj51"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_bl7tw"]
 sky_top_color = Color(0.521719, 0.638493, 0.973119, 1)

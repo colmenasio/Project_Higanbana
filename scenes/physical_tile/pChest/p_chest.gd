@@ -13,7 +13,7 @@ func _on_button_pressed(command: CInteraction):
 	
 
 
-func i_interact(command: CInteraction):
+func interact(command: CInteraction):
 	print("Interacted machine with id: ", self.id, "; interaction type was ", command.get_type())
 	if command.get_type() == CInteraction.Type.LEFT:
 		var extracted = item_container.extract(SOLID.STONE_CHUNK, 2)

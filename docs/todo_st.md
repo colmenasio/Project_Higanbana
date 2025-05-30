@@ -2,8 +2,10 @@
 
 ## WORKFLOW Generic
 - [ ] Placing block and shit cause im in fucking minecraft
+- [ ] Creative Tabs & InfiniteItemStack
 
 ## WORKFLOW Factory
+- [ ] Formalizar Interacciones mediante PhysicalTile 
 - [ ] Recipes 
 
 ## WORKFLOW Rogue

@@ -1,4 +1,4 @@
-extends StaticBody3D
+extends PhysicalTile
 
 var input_inventory: ItemContainer = ItemContainer.new(2, ItemType.T_SOLID)
 var output_inventory: ItemContainer = ItemContainer.new(1, ItemType.T_SOLID)
@@ -15,7 +15,7 @@ func _open_ui(command: CInteraction):
 	ui_instance.set_output(self.output_inventory.as_handle())
 	command.get_canvas().set_entity_interaction_widget(ui_instance)
 
-func i_interact(command: CInteraction):
+func interact(command: CInteraction):
 	if command.get_type() == CInteraction.Type.SHIFT_RIGHT:
 		self._open_ui(command)
 

@@ -11,6 +11,6 @@ static var P_CHEST = PrototypeFactory.item_placeable(
 	ItemType.T_SOLID, 
 	load("res://assets/pOldHiganbanaTextures/block/test_buffer_front.png"), 
 	BasicPlaceablePrototype.new(
-		preload("res://scenes/pChest/pChest.tscn"), 
-		LogicTilePChest.new)
+		preload("res://scenes/physical_tile/pChest/pChest.tscn"), 
+		PChestLogicTile.new)
 )
