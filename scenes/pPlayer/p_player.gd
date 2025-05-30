@@ -211,6 +211,11 @@ func _on_close_interaction_widget():
 ### Public interface
 ########################################################
 
+### Generic Getters
+
+func get_root_canvas() -> RootCanvas:
+	return $RootCanvas
+
 ### UI Hooks
 
 func open_inventory():

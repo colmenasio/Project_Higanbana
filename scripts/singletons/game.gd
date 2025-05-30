@@ -10,11 +10,21 @@ func _ready() -> void:
 	self._player = player_scene.instantiate()
 	
 	self._start_game()
-	self._debug_shit()
+	self._debug_once()
 
-func _debug_shit():
+func _process(delta: float) -> void:
+	self._debug_process()
+
+func _debug_once():
 	self._player.get_inventory().container().insert(SOLID.P_CHEST.stack(1))
 	self._main_realm.place_tile(Vector3i(0, 5, 0), SOLID.P_CHEST.get_placeable_prototype(), self._current_scene)
+
+func _debug_process():
+	if Input.is_action_just_pressed("debug_key_1"):
+		var ui_scene = preload("res://ui/BottomlessItemCatalogue/BottomlessItemCatalogue.tscn")
+		var ui_instance = ui_scene.instantiate()
+		ui_instance.add_tab("tab_name", CATALOGUE.TempCatalogue.as_handle())
+		self.get_player().get_root_canvas().set_entity_interaction_widget(ui_instance)
 
 func _start_game():
 	self._current_scene = get_tree().current_scene

@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://dxrvulk03q6ti"]
+
+[ext_resource type="Script" uid="uid://by1p507y4j3ls" path="res://ui/BottomlessItemCatalogue/bottomless_item_catalogue.gd" id="1_fb5ms"]
+[ext_resource type="PackedScene" uid="uid://q1h2hu1ph276" path="res://ui/ItemContainerDisplay/ItemContainerDisplay.tscn" id="2_c7x7m"]
+
+[node name="BottomlessItemCatalogue" type="PanelContainer"]
+script = ExtResource("1_fb5ms")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer2" parent="MarginContainer" instance=ExtResource("2_c7x7m")]
+layout_mode = 2
+title = "TempCatalogue"

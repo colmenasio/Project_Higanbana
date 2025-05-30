@@ -1,4 +1,5 @@
 extends ItemContainer
+class_name BottomlessItemContainer
 
 func get_amount(slot: int):
 	return 1
