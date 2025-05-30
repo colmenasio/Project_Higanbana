@@ -31,13 +31,19 @@ class Realm:
 	var _logic_tiles: Dictionary[Vector3i, LogicTile]
 	
 	func place_tile(position: Vector3i, prototype: PlaceablePrototype, scene):
+		# Physical tile instanciation
 		var physical = prototype.build_physical_tile()
-		var logic = prototype.build_logical_tile()
+		physical._tile_init(position); 
 		self._physical_tiles[position] = physical
-		self._logic_tiles[position] = logic
 		scene.add_child(physical)
 		physical.position = position
 
+		# Logic tile instanciation
+		var logic = prototype.build_logical_tile()
+		if logic != null:
+			logic._tile_init(position)
+			self._logic_tiles[position] = logic
+		
 	func tick():
 		for logic_tile in self._logic_tiles.values():
 			logic_tile.tick()
