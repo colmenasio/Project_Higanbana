@@ -12,7 +12,7 @@ func _ready() -> void:
 	self._start_game()
 	self._debug_once()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	self._debug_process()
 
 func _debug_once():

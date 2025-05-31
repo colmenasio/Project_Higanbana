@@ -54,38 +54,33 @@ func is_valid() -> bool:
 
 
 func _on_press(type: CInteraction.Type, slot: int):
-	if not self._handle.is_valid(): 
-		return
+	if not self._handle.is_valid(): return
 	var container = self._handle.container()
 	var mouse_item_slot = Game.get_player().get_mouse_item_slot()
-	if type == CInteraction.Type.SHIFT_LEFT:
-		# Directly to inventory
-		push_warning("Not Implemented")
-	elif type == CInteraction.Type.SHIFT_RIGHT:
-		# Take 1
-		if not self.allow_output: return
-		if container.at(slot).is_type_empty(): return
-		var remainder = mouse_item_slot.insert(container.at(slot), 1)
-		container.set_slot(slot, remainder)
-	elif  type == CInteraction.Type.LEFT:
-		# Insert / take all
-		if mouse_item_slot.at(0).is_type_empty():
+	
+	match type:
+		CInteraction.Type.LEFT:
+			# Insert / take all
+			if mouse_item_slot.at(0).is_type_empty():
+				if not self.allow_output: return
+				ItemTransfer.s2au(container, slot, mouse_item_slot)
+			else:
+				if not self.allow_input: return
+				ItemTransfer.a2su(mouse_item_slot, container, slot)
+				
+		CInteraction.Type.RIGHT:
+			# Insert 1 /take half
+			if mouse_item_slot.at(0).is_type_empty():
+				if not self.allow_output: return
+				ItemTransfer.s2au(container, slot, mouse_item_slot, container.at(slot).get_amount()/2)
+			else:
+				if not self.allow_input: return
+				ItemTransfer.a2su(mouse_item_slot, container, slot, 1)
+				
+		CInteraction.Type.SHIFT_LEFT:
+			# Directly to inventory
+			push_warning("Not Implemented")
+			
+		CInteraction.Type.SHIFT_RIGHT:
 			if not self.allow_output: return
-			if container.at(slot).is_type_empty(): return
-			var remainder = mouse_item_slot.insert(container.at(slot))
-			container.set_slot(slot, remainder)
-		else:
-			if not self.allow_input: return
-			var remainder = container.insert_single_slot(slot, mouse_item_slot.at(0))
-			mouse_item_slot.set_slot(0, remainder)
-	elif  type == CInteraction.Type.RIGHT:
-		# Insert 1 /take half
-		if mouse_item_slot.at(0).is_type_empty():
-			if container.at(slot).is_type_empty(): return
-			if not self.allow_output: return
-			var remainder = mouse_item_slot.insert(container.at(slot), int(container.at(slot).get_amount()/2))
-			container.set_slot(slot, remainder)
-		else:
-			if not self.allow_input: return
-			var remainder = container.insert_single_slot(slot, mouse_item_slot.at(0), 1)
-			mouse_item_slot.set_slot(0, remainder)
+			ItemTransfer.s2au(container, slot, mouse_item_slot, 1)

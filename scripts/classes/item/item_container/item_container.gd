@@ -34,22 +34,19 @@ func get_amount(slot: int) -> int:
 func get_headroom(slot: int, base_capacity_if_empty: int = 20) -> int:
 	return self.get_capacity(slot, base_capacity_if_empty) - self.get_amount(slot)
 
-
-## Insert ItemStack into container.[br]
-## Will attempt to distribute items in multiple slots if necessary[br]
-## The return value is the remainder that couldnt be inserter, or the EMPTY stack if nothing remained[br][br]
-## [param max_items] specifies the maximum amount of items the container should accept. When its value is 0, the container will accept up to the whole ItemStack
-func insert(item_in: ItemStack, max_items: int = 0, simulate: bool = false) -> ItemStack:
+## Given a series of slots in order of preference, try to insert the given itemstack into the container [br]
+## Returns the remainder of the insertion [br]
+## [param slots] is a [code]Array[int][/code] [br]
+## ASSUMES SLOTS ARE VALID AND HAVE BEEN CHECKED  [br] [br]
+func _insert( _slots: Array ,item_in: ItemStack,simulate: bool = false):
 	assert(not item_in.is_type_empty(), "Interface error: Can not insert EMPTY stack into ItemContainer")
 	# Returned stack
 	var remainder = item_in.clone()
-	# Effective size of the returned stack
-	var eff_remainder_amount = remainder.get_amount() if max_items <= 0 else max_items
 	
-	for slot in get_insertion_slots(remainder):
+	for slot in _slots:
 		var headroom = self.get_headroom(slot, remainder.get_base_stack_size())
 		if headroom <= 0: continue
-		var inserted_amount = min(headroom, eff_remainder_amount)
+		var inserted_amount = min(headroom, remainder.get_amount())
 		
 		# If fr (not simulate), insert into the Container
 		if not simulate:
@@ -57,45 +54,31 @@ func insert(item_in: ItemStack, max_items: int = 0, simulate: bool = false) -> I
 		
 		# Calculate the remainder and if continue iteration if necessary
 		remainder.delta_amount(-inserted_amount)
-		eff_remainder_amount -= inserted_amount
 		if remainder.get_amount() <= 0: return ItemStack.EMPTY # If remainder is empty, return the EMPTY stack
-		if eff_remainder_amount <= 0: return remainder # If the effective remainder amount is 0, no more items can be inserted
 
 	return remainder
+
+## Insert ItemStack into container.[br]
+## Will attempt to distribute items in multiple slots if necessary[br]
+## The return value is the remainder that couldnt be inserter, or the EMPTY stack if nothing remained[br][br]
+func insert(item_in: ItemStack, simulate: bool = false) -> ItemStack:
+	return self._insert(self.get_insertion_slots(item_in), item_in, simulate)
 
 ## Insert ItemStack into a single slot.[br]
 ## Will not attempt to distribute items outside the given slot [br]
 ## The return value is the remainder that couldnt be inserted, or the EMPTY stack if nothing remained[br][br]
-## [param max_items] specifies the maximum amount of items the container should accept. When its value is 0, the container will accept up to the whole ItemStack
-func insert_single_slot(slot: int, item_in: ItemStack, max_items: int = 0, simulate: bool = false) -> ItemStack:
-	assert(not item_in.is_type_empty(), "Interface error: Can not insert EMPTY stack into ItemContainer")
-	# Returned stack
-	var remainder = item_in.clone()
-	# Effective size of the returned stack
-	var eff_remainder_amount = remainder.get_amount() if max_items <= 0 else max_items
-	
-	if get_insertion_slots(remainder).has(slot):
-		var headroom = self.get_headroom(slot, remainder.get_base_stack_size())
-		if headroom <= 0: return remainder
-		var inserted_amount = min(headroom, eff_remainder_amount)
-		
-		# If fr (not simulate), insert into the Container
-		if not simulate:
-			self.set_slot(slot, remainder.clone_and_set_amount(self.get_amount(slot)+inserted_amount))
-		
-		# Calculate the remainder and if continue iteration if necessary
-		remainder.delta_amount(-inserted_amount)
-		if remainder.get_amount() <= 0: return ItemStack.EMPTY # If remainder is empty, return the EMPTY stack
+func insert_single_slot(slot: int, item_in: ItemStack , simulate: bool = false) -> ItemStack:
+	if slot in self.get_insertion_slots(item_in):
+		return self._insert([slot], item_in, simulate)
+	else:
+		return item_in.clone()
 
-	return remainder
-
-## Extract ItemStack from container.
-## Will attempt to extract up to the indicated amount of items of the specified ItemPrototype
-## The return value is the extracted stack, or the EMPTY stack if nothing can be extracted 
-## [param max_items] specifies the maximum amount of items the container should accept. When its value is 0, the container will extract as much as possible
-func extract(item_out: ItemPrototype, max_items: int = 0, simulate: bool = false) -> ItemStack:
+## Given a series of slots in order of preference, try to insert the given itemstack into the container [br]
+## Returns the remainder of the insertion [br]
+## [param slots] is a [code]Array[int][/code] [br][br]
+func _extract(_slots: Array, item_out: ItemPrototype, max_items: int = 0, simulate: bool = false) -> ItemStack:
 	var extracted_stack = item_out.stack(0)
-	for slot in self.slots():
+	for slot in _slots:
 		if self.at(slot).stacks_into(extracted_stack):
 			var extracted_amount = self.at(slot).get_amount()
 			if max_items > 0: # Cap the extracted amount
@@ -107,15 +90,39 @@ func extract(item_out: ItemPrototype, max_items: int = 0, simulate: bool = false
 	return extracted_stack if extracted_stack.get_amount() != 0 else ItemStack.EMPTY
 
 ## Extract ItemStack from container.
+## Will attempt to extract up to the indicated amount of items of the specified ItemPrototype
+## The return value is the extracted stack, or the EMPTY stack if nothing can be extracted 
+## [param max_items] specifies the maximum amount of items the container should accept. When its value is 0, the container will extract as much as possible
+func extract(item_out: ItemPrototype, max_items: int = 0, simulate: bool = false) -> ItemStack:
+	return self._extract(range(self.slots()), item_out, max_items, simulate)
+
+## Extract ItemStack from container.
 ## Will attempt to extract up to the indicated amount of items of any arbitrary ItemPrototype
 ## The return value is the extracted stack, or the EMPTY stack if nothing can be extracted 
 ## [param max_items] specifies the maximum amount of items the container should accept. When its value is 0, the container will extract es much as possible
 func extract_any(max_items: int = 0, simulate: bool = false) -> ItemStack:
 	for stack in self._contents:
 		if not stack.is_type_empty():
-			return self.extract(stack.get_prototype(), max_items, simulate)
+			return self._extract(range(self.slots()), stack.get_prototype(), max_items, simulate)
 	return ItemStack.EMPTY
 
+## Extract ItemStack from the slot specified.
+## Will attempt to extract up to the indicated amount of items of the specified ItemPrototype
+## The return value is the extracted stack, or the EMPTY stack if nothing can be extracted 
+## [param max_items] specifies the maximum amount of items the container should accept. When its value is 0, the container will extract as much as possible
+func extract_single_slot(slot: int, item_out: ItemPrototype, max_items: int = 0, simulate: bool = false) -> ItemStack:
+	return self._extract([slot], item_out, max_items, simulate)
+
+## Extract ItemStack from the slot specified.
+## Will attempt to extract up to the indicated amount of items of any arbitrary ItemPrototype
+## The return value is the extracted stack, or the EMPTY stack if nothing can be extracted 
+## [param max_items] specifies the maximum amount of items the container should accept. When its value is 0, the container will extract es much as possible
+func extract_any_single_slot(slot: int, max_items: int = 0, simulate: bool = false) -> ItemStack:
+	if self.at(slot).is_type_empty():
+		return ItemStack.EMPTY
+	else:
+		return self._extract([slot], self.at(slot).get_prototype(), max_items, simulate)
+	
 ## If the item were to be inserted in the container, return the slot it could be inserted into, in order of preference
 ## Should not care about vacancy of the slot
 func get_insertion_slots(item_in: ItemStack) -> Array[int]:

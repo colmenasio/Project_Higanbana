@@ -2,9 +2,9 @@
 
 ## WORKFLOW Generic
 - [ ] Placing block and shit cause im in fucking minecraft
-- [ ] Creative Tabs & InfiniteItemStack
 
 ## WORKFLOW Factory
+- [ ] Coroutines for item transfer
 - [ ] Recipes 
 
 ## WORKFLOW Rogue
@@ -13,6 +13,7 @@
 
 
 ## DONE (here for visual gratification)
+- [x] Creative Tabs & InfiniteItemStack
 - [x] Formalizar Interacciones mediante PhysicalTile 
 - [x] TileEntity hell yeah viva maincrah (Make Game be able manage TileEntity creation and ticking)
 - [x] Basic machine prototype
