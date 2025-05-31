@@ -85,7 +85,8 @@ func _extract(_slots: Array, item_out: ItemPrototype, max_items: int = 0, simula
 				extracted_amount = min(max_items-extracted_stack.get_amount(), extracted_amount)
 			extracted_stack.delta_amount(extracted_amount)
 			if not simulate: self.at(slot).delta_amount(-extracted_amount)
-			if self.at(slot).get_amount() <= 0: self._contents[slot] = ItemStack.EMPTY
+			if self.at(slot).get_amount() <= 0:
+				self._contents[slot] = ItemStack.EMPTY
 			if extracted_stack.get_amount() == max_items: return extracted_stack
 	return extracted_stack if extracted_stack.get_amount() != 0 else ItemStack.EMPTY
 

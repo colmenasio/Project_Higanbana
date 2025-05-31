@@ -4,15 +4,18 @@
 - [ ] Placing block and shit cause im in fucking minecraft
 
 ## WORKFLOW Factory
-- [ ] Coroutines for item transfer
+- [ ] Capabilities
 - [ ] Recipes 
 
 ## WORKFLOW Rogue
-- [ ] Basic attack
 - [ ] Redo pPlayer codebase to be more manageable please
+- [ ] Weapon slots
+- [ ] Basic attack
 
 
 ## DONE (here for visual gratification)
+- [x] Fix broken Insertion/Extraction
+- [x] Coroutines for item transfer
 - [x] Creative Tabs & InfiniteItemStack
 - [x] Formalizar Interacciones mediante PhysicalTile 
 - [x] TileEntity hell yeah viva maincrah (Make Game be able manage TileEntity creation and ticking)

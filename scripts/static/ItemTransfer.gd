@@ -12,6 +12,7 @@ static func a2at(_from: ItemContainer, _to: ItemContainer, type: ItemStack , max
 	if simulated_extract.is_type_empty(): return
 	var simulated_remainder = _to.insert(simulated_extract, true)
 	var true_max = simulated_extract.get_amount()-simulated_remainder.get_amount()
+	if true_max == 0: return
 	
 	# Perform the insertion
 	_to.insert(_from.extract(type.get_prototype(), true_max))
@@ -25,6 +26,7 @@ static func s2at(_from: ItemContainer, _from_slot: int, _to: ItemContainer, type
 	if simulated_extract.is_type_empty(): return
 	var simulated_remainder = _to.insert(simulated_extract, true)
 	var true_max = simulated_extract.get_amount()-simulated_remainder.get_amount()
+	if true_max == 0: return
 	
 	# Perform the insertion
 	_to.insert(_from.extract_single_slot(_from_slot, type.get_prototype(), true_max))
@@ -38,6 +40,7 @@ static func a2st(_from: ItemContainer, _to: ItemContainer, _to_slot: int, type: 
 	if simulated_extract.is_type_empty(): return
 	var simulated_remainder = _to.insert_single_slot(_to_slot, simulated_extract, true)
 	var true_max = simulated_extract.get_amount()-simulated_remainder.get_amount()
+	if true_max == 0: return
 	
 	# Perform the insertion
 	_to.insert_single_slot(_to_slot, _from.extract(type.get_prototype(), true_max))
@@ -51,6 +54,7 @@ static func s2st(_from: ItemContainer, _from_slot: int, _to: ItemContainer, _to_
 	if simulated_extract.is_type_empty(): return
 	var simulated_remainder = _to.insert_single_slot(_to_slot, simulated_extract, true)
 	var true_max = simulated_extract.get_amount()-simulated_remainder.get_amount()
+	if true_max == 0: return
 	
 	# Perform the insertion
 	_to.insert_single_slot(_to_slot, _from.extract_single_slot(_from_slot, type.get_prototype(), true_max))
@@ -64,6 +68,7 @@ static func a2au(_from: ItemContainer, _to: ItemContainer, max_amount: int = 0):
 	if simulated_extract.is_type_empty(): return
 	var simulated_remainder = _to.insert(simulated_extract, true)
 	var true_max = simulated_extract.get_amount()-simulated_remainder.get_amount()
+	if true_max == 0: return
 	
 	# Perform the insertion
 	_to.insert(_from.extract_any(true_max))
@@ -77,7 +82,7 @@ static func s2au(_from: ItemContainer, _from_slot: int, _to: ItemContainer, max_
 	if simulated_extract.is_type_empty(): return
 	var simulated_remainder = _to.insert(simulated_extract, true)
 	var true_max = simulated_extract.get_amount()-simulated_remainder.get_amount()
-	
+	if true_max == 0: return
 	# Perform the insertion
 	_to.insert(_from.extract_any_single_slot(_from_slot, true_max))
 
@@ -90,6 +95,7 @@ static func a2su(_from: ItemContainer, _to: ItemContainer, _to_slot: int, max_am
 	if simulated_extract.is_type_empty(): return
 	var simulated_remainder = _to.insert_single_slot(_to_slot, simulated_extract, true)
 	var true_max = simulated_extract.get_amount()-simulated_remainder.get_amount()
+	if true_max == 0: return
 	
 	# Perform the insertion
 	_to.insert_single_slot(_to_slot, _from.extract_any(true_max))
@@ -102,6 +108,7 @@ static func s2su(_from: ItemContainer, _from_slot: int, _to: ItemContainer, _to_
 	if simulated_extract.is_type_empty(): return
 	var simulated_remainder = _to.insert_single_slot(_to_slot, simulated_extract, true)
 	var true_max = simulated_extract.get_amount()-simulated_remainder.get_amount()
+	if true_max == 0: return
 	
 	# Perform the insertion
 	_to.insert_single_slot(_to_slot, _from.extract_any_single_slot(_from_slot, true_max))
